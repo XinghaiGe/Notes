@@ -8,9 +8,13 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun NotesList(notes: List<Note>, onDelete: (Note) -> Unit) {
-    LazyColumn {
-        items(notes) { note ->
-            NoteItem(note = note, onDelete = onDelete)
+    if (notes.isEmpty()) {
+        Text(text = "No notes to display.")
+    } else {
+        LazyColumn {
+            items(notes) { note ->
+                NoteItem(note = note, onDelete = onDelete)
+            }
         }
     }
 }
