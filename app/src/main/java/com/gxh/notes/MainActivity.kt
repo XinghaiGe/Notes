@@ -32,6 +32,8 @@ class MainActivity : ComponentActivity() {
     fun MainActivityLayout() {
         val notes = remember { mutableStateOf(dbHelper.getAllNotes()) }
         val textFieldContent = remember { mutableStateOf("") }
+        val currentNoteId = remember { mutableStateOf<Int?>(null) }
+
 
         Column(
             modifier = Modifier
@@ -43,6 +45,9 @@ class MainActivity : ComponentActivity() {
             NotesList(notes = notes.value, onDelete = { note ->
                 dbHelper.deleteNote(note)
                 notes.value = dbHelper.getAllNotes()
+            }, onUpdate = { note ->
+                currentNoteId.value = note.id
+                textFieldContent.value = note.content
             })
 
             OutlinedTextField(
@@ -53,12 +58,19 @@ class MainActivity : ComponentActivity() {
             )
 
             Button(onClick = {
-                val newNote = Note(id = notes.value.size + 1, content = textFieldContent.value)
-                dbHelper.addNote(newNote)
+                if (currentNoteId.value != null) {
+                    val updatedNote =
+                        Note(id = currentNoteId.value!!, content = textFieldContent.value)
+                    dbHelper.updateNote(updatedNote)
+                    currentNoteId.value = null
+                } else {
+                    val newNote = Note(id = notes.value.size + 1, content = textFieldContent.value)
+                    dbHelper.addNote(newNote)
+                }
                 notes.value = dbHelper.getAllNotes()
                 textFieldContent.value = ""
             }) {
-                Text(text = "Add Note")
+                Text(text = if (currentNoteId.value != null) "Update Note" else "Add Note")
             }
         }
     }

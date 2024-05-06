@@ -79,4 +79,19 @@ class NotesDBHelper(context: Context) :
 
         return notes
     }
+
+    fun updateNote(note: Note) {
+        val db = this.writableDatabase
+
+        val values = ContentValues().apply {
+            put(NoteEntry.CONTENT, note.content)
+        }
+
+        val selection = "${NoteEntry.ID} LIKE ?"
+        val selectionArgs = arrayOf(note.id.toString())
+
+        db.update(NoteEntry.TABLE_NAME, values, selection, selectionArgs)
+
+        db.close()
+    }
 }
