@@ -17,6 +17,11 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 
+/**
+ * todo
+ * The next step would be to handle the user interface for viewing a specific note.
+ * Currently, your application allows users to add, delete, and update notes, but there is no functionality for viewing the details of an existing note.
+ */
 class MainActivity : ComponentActivity() {
     private lateinit var dbHelper: NotesDBHelper
 
